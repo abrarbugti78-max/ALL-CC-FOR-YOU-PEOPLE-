@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reels Trending CC Studio</title>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            background-color: #0b0d13;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            font-size: 16px;
+            margin: 6px 0;
+            color: #ff2a5f;
+            text-align: center;
+            font-weight: 700;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background: #141722;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            border: 1px solid #202433;
+        }
+        .preview-box {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 240px;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: filter 0.2s ease;
+        }
+        .btn {
+            background: linear-gradient(135deg, #0055ff, #00bfff);
+            color: white;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .export-btn {
+            background: linear-gradient(135deg, #ff2a5f, #ff6a3d);
+            margin-top: 10px;
+        }
+        .section-title {
+            font-size: 12px;
+            color: #8b92a5;
+            margin: 10px 0 6px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .luts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .lut-card {
+            background: #1b1f2e;
+            border: 2px solid #282f45;
+            border-radius: 8px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: #c5cbd3;
+            transition: 0.2s;
+        }
+        .lut-card:hover, .lut-card.active {
+            border-color: #ff2a5f;
+            background: #251e2e;
+            color: #ffffff;
+            transform: scale(1.02);
+        }
+        .status-text {
+            font-size: 11px;
+            text-align: center;
+            color: #00d2ff;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h2>🔥 Reels Trending CC Studio</h2>
+        
+        <input type="file" id="videoUpload" accept="video/*" style="display:none">
+        <button class="btn" onclick="document.getElementById('videoUpload').click()">+ Upload Reels Video</button>
+
+        <div class="preview-box">
+            <video id="videoPlayer" playsinline controls loop></video>
+        </div>
+
+        <div class="section-title">Select Instagram Reels CC</div>
+        
+        <div class="luts-grid">
+            <div class="lut-card active" onclick="applyReelsCC('normal', this)">Original</div>
+            <div class="lut-card" onclick="applyReelsCC('glowcc', this)">✨ Soft Glow CC</div>
+            <div class="lut-card" onclick="applyReelsCC('darkmood', this)">🖤 Dark Aesthetic</div>
+            <div class="lut-card" onclick="applyReelsCC('vibrant', this)">💖 Vibrant Pop CC</div>
+            <div class="lut-card" onclick="applyReelsCC('purpledream', this)">💜 Purple Dream</div>
+            <div class="lut-card" onclick="applyReelsCC('hdrsharp', this)">💎 Ultra HDR Sharp</div>
+            <div class="lut-card" onclick="applyReelsCC('cinematic', this)">🎬 Cinematic Teal</div>
+            <div class="lut-card" onclick="applyReelsCC('retro', this)">📼 90s Vintage CC</div>
+        </div>
+
+        <button class="btn export-btn" onclick="startVideoExport()">Export & Download Reel</button>
+        <div class="status-text" id="exportStatus">Ready: Select a CC to apply</div>
+    </div>
+
+    <script>
+        const videoUpload = document.getElementById('videoUpload');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        videoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                videoPlayer.src = url;
+                videoPlayer.load();
+                videoPlayer.play();
+            }
+        });
+
+        function applyReelsCC(ccName, element) {
+            document.querySelectorAll('.lut-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Direct video element par filter apply hoga
+            if (ccName === 'glowcc') {
+                videoPlayer.style.filter = 'brightness(120%) contrast(125%) saturate(140%) blur(0.3px)';
+            } else if (ccName === 'darkmood') {
+                videoPlayer.style.filter = 'brightness(75%) contrast(160%) saturate(60%) hue-rotate(-15deg)';
+            } else if (ccName === 'vibrant') {
+                videoPlayer.style.filter = 'brightness(110%) contrast(130%) saturate(190%)';
+            } else if (ccName === 'purpledream') {
+                videoPlayer.style.filter = 'brightness(115%) contrast(120%) saturate(150%) hue-rotate(45deg)';
+            } else if (ccName === 'hdrsharp') {
+                videoPlayer.style.filter = 'contrast(170%) saturate(150%) brightness(105%)';
+            } else if (ccName === 'cinematic') {
+                videoPlayer.style.filter = 'brightness(100%) contrast(140%) saturate(120%) hue-rotate(20deg)';
+            } else if (ccName === 'retro') {
+                videoPlayer.style.filter = 'sepia(35%) contrast(120%) brightness(95%) saturate(85%)';
+            } else {
+                videoPlayer.style.filter = 'none';
+            }
+
+            document.getElementById('exportStatus').innerText = `Applied: ${element.innerText}`;
+        }
+
+        function startVideoExport() {
+            if (!videoPlayer.src) {
+                alert("Pehle video upload karein!");
+                return;
+            }
+            alert("Aap video play karke screen recorder ya direct download use kar sakte hain. Filter ab live video par apply ho chuka hai!");
+        }
+    </script>
+</body>
+</html>
